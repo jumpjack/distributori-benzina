@@ -1,6 +1,6 @@
 # distributori-benzina
 
-Test per ricerca distributore più economico usando cronjob ttamite actions di github come spiegato qui:  https://theanshuman.dev/articles/free-cron-jobs-with-github-actions-31d6
+Test per ricerca distributore più economico usando cronjob tramite actions di github come spiegato qui:  https://theanshuman.dev/articles/free-cron-jobs-with-github-actions-31d6
 
 Portale carburanti MISE: https://carburanti.mise.gov.it/ospzSearch/home
 
@@ -11,7 +11,7 @@ Base url: https://carburanti.mise.gov.it/ospzApi/registry/
 ### Elenco province
 
 - Endpoint: registry/province
-- https://carburanti.mise.gov.it/ospzSearch/home/registry/registry/province?regionId=9
+- https://carburanti.mise.gov.it/ospzApi/registry/province?regionId=9
 
 Risultato:
 
@@ -45,7 +45,7 @@ Risultato:
 ### Elenco comuni di data provincia
 
  - Endpoint: registry/town
- - Test link:  https://carburanti.mise.gov.it/ospzSearch/home/registry/town?province=RM
+ - Test link:  https://carburanti.mise.gov.it/ospzApi/registry/town?province=RM
 
 Risultato:
 
@@ -68,17 +68,17 @@ Risultato:
 ### Elenco autostrade d'italia ([fonte](https://github.com/Pater999/osservaprezzi-carburanti-node/blob/master/src/methods/registry.ts))
 
 - Endpoint: registry/highway
-- Test link:  https://carburanti.mise.gov.it/ospzSearch/home/registry/highway
+- Test link:  https://carburanti.mise.gov.it/ospzApi/registry/highway
 
 ### Elenco marchi:
 
 - Endpoint: registry/brands
-- Test link:  https://carburanti.mise.gov.it/ospzSearch/home/registry/brands
+- Test link:  https://carburanti.mise.gov.it/ospzApi/registry/brands
 
 ### Elenco loghi
 
 - Endpoint: registry/alllogos
-- Test link:  https://carburanti.mise.gov.it/ospzSearch/home/registry/alllogos
+- Test link:  https://carburanti.mise.gov.it/ospzApi/alllogos
 
 ------------------
 
