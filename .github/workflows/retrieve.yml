@@ -16,10 +16,11 @@ jobs:
     environment: production
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Run article reactions job
-        uses: Satak/webrequest-action@v1.2.3
+      - name: Scarica file
+        uses: satak/webrequest-action@master
         with:
           # Web request URL endpoint
           url: "https://carburanti.mise.gov.it/ospzApi/registry/province"
-          method: POST
-          headers: '{"regionId": "9"}'
+          method: GET
+          payload: '{"regionId": "9"}'        
+# headers: '{"regionId": "9"}'
