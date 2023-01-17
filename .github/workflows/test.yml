@@ -20,7 +20,7 @@ jobs:
         uses: satak/webrequest-action@master
         with:
           # Web request URL endpoint
-          url: "https://carburanti.mise.gov.it/ospzApi/registry/province"
-          method: GET
-          payload: '{"regionId": "9"}'        
-# headers: '{"regionId": "9"}'
+          url: "https://carburanti.mise.gov.it/ospzApi/search/zone"
+          method: POST
+          payload: '{ "region" : 9, "province" : "RM","town" :  "Affile","fuelType":  "1-1"}'        
+
