@@ -88,8 +88,10 @@ Risultato:
 
 ### Dettagli area di servizio
 
+Una volta ottenuto tramite ricerca l'id di una stazione di servizio, con questa query se ne possono ottenere i dettagli:
+
 - Endpoint: registry/servicearea/
-- Test link: https://carburanti.mise.gov.it/ospzApi/registry/servicearea/111
+- Test link: https://carburanti.mise.gov.it/ospzApi/registry/servicearea/52621
 
 ### Ricerca per zona
 
