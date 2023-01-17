@@ -98,7 +98,9 @@ Una volta ottenuto tramite ricerca l'id di una stazione di servizio, con questa 
 ### Ricerca per zona
 
 - Url: https://carburanti.mise.gov.it/ospzApi/search/zone
-- Header: body = {
+- Header: 
+```
+{
       region: criteria.region,
       province: criteria.province ?? null,
       town: criteria.town ?? null,
@@ -106,6 +108,8 @@ Una volta ottenuto tramite ricerca l'id di una stazione di servizio, con questa 
       fuelType: `${criteria.fuelType ?? FuelType.ALL}-${
         criteria.refuelingMode ?? RefuelingMode.ALL
       }
+```
+
 
 refuelingMode e fuelTpye sono definiti in https://github.com/Pater999/osservaprezzi-carburanti-node/blob/master/src/types/enums.ts:
 
@@ -125,6 +129,31 @@ export enum FuelType {
   GCN = '323',
   GNL = '324',
 }
+```
+
+
+
+Esempio:
+```
+{ "region" : 9, 
+ "province" : "RM", 
+ "town" :  "Affile", 
+ "priceOrder" : "desc",
+ "fuelType":  "1-1"
+}
+```
+
+Risultato (probabilmente il centro dell'area di ricerca, da usare per una successiva query):
+```
+{
+    "success": false,
+    "center": {
+        "lat": 41.890546,
+        "lng": 41.890546
+    },
+    "results": []
+}
+
 ```
 ###
 
