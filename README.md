@@ -99,11 +99,11 @@ Una volta ottenuto tramite ricerca l'id di una stazione di servizio, con questa 
 
 Criteri di base per tutter le query da mettere nell'header del POST:
 
-```
-  fuelType: v. sotto
-  refuelingMode: v. sotto
-  priceOrder: "asc" oppure "desc"
-```  
+
+- fuelType: v. sotto
+- refuelingMode: v. sotto
+- priceOrder: "asc" oppure "desc"
+
   
 ### Ricerca per zona
 
@@ -111,15 +111,30 @@ Criteri di base per tutter le query da mettere nell'header del POST:
 - Endpoint:  search/zone
 - Url: https://carburanti.mise.gov.it/ospzApi/search/zone
 - Criteri aggiuntivi in header: 
+
+region: ([numero](https://carburanti.mise.gov.it/ospzApi/registry/region)),
+      
+province: ([sigla della provincia](https://carburanti.mise.gov.it/ospzApi/registry/province?regionId=9) oppure null; il link di esempio fornisce l'elenco delle province della regione 9  (Lazio)),
+      
+town: ([nome del coumne](https://carburanti.mise.gov.it/ospzApi/registry/town?province=RM) oppure null; il link di esempio fornisce la lista dei comuni della provincia di Roma),
+
+priceOrder: "asc" o "desc",
+      
+fuelType: "FuelType-RefuelingMode"  (FuelType e RefuelingMode sono numeri (v. sotto))
+      
+- Esempio di header completo:
+
 ```
 {
-      region: ([numero](https://carburanti.mise.gov.it/ospzApi/registry/region)),
-      province: ([sigla della provincia](https://carburanti.mise.gov.it/ospzApi/registry/province?regionId=9) oppure null; il link di esempio fornisce l'elenco delle province della regione 9  (Lazio)),
-      town: ([nome del coumne](https://carburanti.mise.gov.it/ospzApi/registry/town?province=RM) oppure null; il link di esempio fornisce la lista dei comuni della provincia di Roma),
-      priceOrder: "asc" o "desc",
-      fuelType: "FuelType-RefuelingMode"  (FuelType e RefuelingMode sono numeri (v. sotto))
-      }
+fuelType: 1,
+refuelingMode: 1,
+priceOrder: "asc",
+region:9,      
+province: "RM",
+town: "Affile"
+}
 ```
+
 
 
 *refuelingMode* e *fuelTpye* sono definiti in https://github.com/Pater999/osservaprezzi-carburanti-node/blob/master/src/types/enums.ts:
