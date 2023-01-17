@@ -8,6 +8,7 @@ Portale carburanti MISE: https://carburanti.mise.gov.it/ospzSearch/home
 
 Base url: https://carburanti.mise.gov.it/ospzApi/registry/
 
+
 ### Elenco regioni:
 
 - Endpoint: 
@@ -85,16 +86,42 @@ Risultato:
 - Endpoint: registry/alllogos
 - Test link:  https://carburanti.mise.gov.it/ospzApi/registry/alllogos
 
-###
+### Dettagli area di servizio
 
 - Endpoint: registry/servicearea/
 - Test link: https://carburanti.mise.gov.it/ospzApi/registry/servicearea/111
 
-###
+### Ricerca per zona
 
-- Endpoint: 
-- Test link: https://carburanti.mise.gov.it/ospzApi/
+- Url: https://carburanti.mise.gov.it/ospzApi/search/zone
+- Header: body = {
+      region: criteria.region,
+      province: criteria.province ?? null,
+      town: criteria.town ?? null,
+      priceOrder: criteria.priceOrder ?? 'desc',
+      fuelType: `${criteria.fuelType ?? FuelType.ALL}-${
+        criteria.refuelingMode ?? RefuelingMode.ALL
+      }
 
+refuelingMode e fuelTpye sono definiti in https://github.com/Pater999/osservaprezzi-carburanti-node/blob/master/src/types/enums.ts:
+
+```
+export enum RefuelingMode {
+  SELF = '1',
+  SERVED = '0',
+  ALL = 'x',
+}
+
+export enum FuelType {
+  ALL = '0',
+  PETROL = '1', // Benzina
+  DIESEL = '2', // Gasolio
+  METHANE = '3', // Metano
+  GPL = '4',
+  GCN = '323',
+  GNL = '324',
+}
+```
 ###
 
 - Endpoint: 
