@@ -118,18 +118,6 @@ Criteri di base per tutter le query da mettere nell'header del POST:
     - priceOrder: "asc" o "desc",      
     - fuelType: "FuelType-RefuelingMode"  (FuelType e RefuelingMode sono numeri (v. sotto))
       
-- Esempio di header completo:
-
-```
-{
-fuelType: 1,
-refuelingMode: 1,
-priceOrder: "asc",
-region:9,      
-province: "RM",
-town: "Affile"
-}
-```
 
 
 
@@ -154,31 +142,50 @@ export enum FuelType {
 ```
 
 
+- Esempio di header completo:
 
-Esempio:
 ```
-{ "region" : 9, 
+{ 
+ "region" : 9, 
  "province" : "RM", 
- "town" :  "Affile", 
+ "town" :  "Monterotondo", 
  "priceOrder" : "desc",
- "fuelType":  "1-1"
+ "fuelType":  "1-1",
+ "refuelingMode" : 1
 }
 ```
 
-Risultato (probabilmente il centro dell'area di ricerca, da usare per una successiva query):
+Risultato:
+
+
 ```
 {
-    "success": false,
+    "success": true,
     "center": {
-        "lat": 41.890546,
-        "lng": 41.890546
+        "lat": xxxxxxxxxx,
+        "lng": yyyyyyyyyyyyyyy
     },
     "results": []
-}
+}  
+```
 
-Nota: perchè LAT e LNG hanno lo stesso valore?!?
+Formato delle singole stazioni di servizio nell'array "results":
 
 ```
+{
+        "id": zzzzzzzzzzzz,
+        "name": "nnnnnnnnnnnnnnnnn",
+        "fuels": [{
+            "id": ffffffffffffffffffff,
+            "price": ppppppppppppp,
+            "name": "nnnnnnnnnnnnnnnnnn",
+            "fuelId": 1,
+            "isSelf": false
+        }
+ ```
+ 
+
+
 ### Ricerca per zona  (poligono)
 
 - Base url:  https://carburanti.mise.gov.it/ospzApi/
