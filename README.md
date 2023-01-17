@@ -6,7 +6,11 @@ Portale carburanti MISE: https://carburanti.mise.gov.it/ospzSearch/home
 
 ## API queries
 
-Elenco province: https://carburanti.mise.gov.it/ospzApi/registry/province?regionId=9
+### Elenco province
+
+Url: https://carburanti.mise.gov.it/ospzApi/registry/province?regionId=9
+
+Risultato:
 
 ```
 {
@@ -35,7 +39,11 @@ Elenco province: https://carburanti.mise.gov.it/ospzApi/registry/province?region
 }
 ```
 
-Elenco comuni di data provincia: https://carburanti.mise.gov.it/ospzApi/registry/town?province=RM
+### Elenco comuni di data provincia
+
+Url: https://carburanti.mise.gov.it/ospzApi/registry/town?province=RM
+
+Risultato:
 
 ```
 {
@@ -53,6 +61,13 @@ Elenco comuni di data provincia: https://carburanti.mise.gov.it/ospzApi/registry
 }
 ```
 
+------------------
 
+Dati odierni (tutta italia in singolo file):
+
+- Prezzo alle 08:00: https://www.mise.gov.it/images/exportCSV/prezzo_alle_8.csv
+- Anagrafica impianti attivi: https://www.mise.gov.it/images/exportCSV/anagrafica_impianti_attivi.csv
+
+------------------
 
 Archivio anni precedenti: https://www.mise.gov.it/it/open-data/elenco-dataset/carburanti-archivio-prezzi
