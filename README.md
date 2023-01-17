@@ -4,6 +4,8 @@ Test per ricerca distributore più economico usando cronjob tramite actions di g
 
 Portale carburanti MISE: https://carburanti.mise.gov.it/ospzSearch/home
 
+Libreria usata per chiamate al server nelle actions: https://github.com/Satak/webrequest-action
+
 ## API queries
 
 Base url: https://carburanti.mise.gov.it/ospzApi/registry/
