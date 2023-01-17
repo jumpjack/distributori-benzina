@@ -20,3 +20,8 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo Hello, world!
+        with:
+          # Web request URL endpoint
+          url: "https://carburanti.mise.gov.it/ospzApi/registry/province?"
+          method: POST
+          headers: '{"regionId": "9"}
