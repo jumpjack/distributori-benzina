@@ -22,4 +22,4 @@ jobs:
           # Web request URL endpoint
           url: "https://carburanti.mise.gov.it/ospzApi/registry/province"
           method: POST
-          headers: '{"regionId": 9"}'
+          headers: '{"regionId": "9"}'
