@@ -8,6 +8,11 @@ Portale carburanti MISE: https://carburanti.mise.gov.it/ospzSearch/home
 
 Base url: https://carburanti.mise.gov.it/ospzApi/registry/
 
+### Elenco regioni:
+
+- Endpoint: 
+- Test link: https://carburanti.mise.gov.it/ospzApi/registry/region
+
 ### Elenco province
 
 - Endpoint: registry/province
@@ -78,7 +83,22 @@ Risultato:
 ### Elenco loghi
 
 - Endpoint: registry/alllogos
-- Test link:  https://carburanti.mise.gov.it/ospzApi/alllogos
+- Test link:  https://carburanti.mise.gov.it/ospzApi/registry/alllogos
+
+###
+
+- Endpoint: registry/servicearea/
+- Test link: https://carburanti.mise.gov.it/ospzApi/registry/servicearea/111
+
+###
+
+- Endpoint: 
+- Test link: https://carburanti.mise.gov.it/ospzApi/
+
+###
+
+- Endpoint: 
+- Test link: https://carburanti.mise.gov.it/ospzApi/
 
 ------------------
 
