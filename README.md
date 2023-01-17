@@ -6,9 +6,12 @@ Portale carburanti MISE: https://carburanti.mise.gov.it/ospzSearch/home
 
 ## API queries
 
+Base url: https://carburanti.mise.gov.it/ospzApi/registry/
+
 ### Elenco province
 
-Url: https://carburanti.mise.gov.it/ospzApi/registry/province?regionId=9
+- Endpoint: registry/province
+- https://carburanti.mise.gov.it/ospzSearch/home/registry/registry/province?regionId=9
 
 Risultato:
 
@@ -41,7 +44,8 @@ Risultato:
 
 ### Elenco comuni di data provincia
 
-Url: https://carburanti.mise.gov.it/ospzApi/registry/town?province=RM
+ - Endpoint: registry/town
+ - Test link:  https://carburanti.mise.gov.it/ospzSearch/home/registry/town?province=RM
 
 Risultato:
 
@@ -60,6 +64,21 @@ Risultato:
     ]
 }
 ```
+
+### Elenco autostrade d'italia ([fonte](https://github.com/Pater999/osservaprezzi-carburanti-node/blob/master/src/methods/registry.ts))
+
+- Endpoint: registry/highway
+- Test link:  https://carburanti.mise.gov.it/ospzSearch/home/registry/highway
+
+### Elenco marchi:
+
+- Endpoint: registry/brands
+- Test link:  https://carburanti.mise.gov.it/ospzSearch/home/registry/brands
+
+### Elenco loghi
+
+- Endpoint: registry/alllogos
+- Test link:  https://carburanti.mise.gov.it/ospzSearch/home/registry/alllogos
 
 ------------------
 
