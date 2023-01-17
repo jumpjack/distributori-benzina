@@ -95,23 +95,34 @@ Una volta ottenuto tramite ricerca l'id di una stazione di servizio, con questa 
 - Endpoint: registry/servicearea/
 - Test link: https://carburanti.mise.gov.it/ospzApi/registry/servicearea/52621
 
+## Ricerche ## 
+
+Criteri di base per tutter le query da mettere nell'header del POST:
+
+```
+  fuelType: v. sotto
+  refuelingMode: v. sotto
+  priceOrder: "asc" oppure "desc"
+```  
+  
 ### Ricerca per zona
 
+- Base url:  https://carburanti.mise.gov.it/ospzApi/
+- Endpoint:  search/zone
 - Url: https://carburanti.mise.gov.it/ospzApi/search/zone
-- Header: 
+- Criteri aggiuntivi in header: 
 ```
 {
-      region: criteria.region,
-      province: criteria.province ?? null,
-      town: criteria.town ?? null,
-      priceOrder: criteria.priceOrder ?? 'desc',
-      fuelType: `${criteria.fuelType ?? FuelType.ALL}-${
-        criteria.refuelingMode ?? RefuelingMode.ALL
+      region: ([numero](https://carburanti.mise.gov.it/ospzApi/registry/region)),
+      province: ([sigla della provincia](https://carburanti.mise.gov.it/ospzApi/registry/province?regionId=9) oppure null; il link di esempio fornisce l'elenco delle province della regione 9  (Lazio)),
+      town: ([nome del coumne](https://carburanti.mise.gov.it/ospzApi/registry/town?province=RM) oppure null; il link di esempio fornisce la lista dei comuni della provincia di Roma),
+      priceOrder: "asc" o "desc",
+      fuelType: "FuelType-RefuelingMode"  (FuelType e RefuelingMode sono numeri (v. sotto))
       }
 ```
 
 
-refuelingMode e fuelTpye sono definiti in https://github.com/Pater999/osservaprezzi-carburanti-node/blob/master/src/types/enums.ts:
+*refuelingMode* e *fuelTpye* sono definiti in https://github.com/Pater999/osservaprezzi-carburanti-node/blob/master/src/types/enums.ts:
 
 ```
 export enum RefuelingMode {
@@ -155,6 +166,26 @@ Risultato (probabilmente il centro dell'area di ricerca, da usare per una succes
 }
 
 ```
+### Ricerca per area
+
+- Base url:  https://carburanti.mise.gov.it/ospzApi/
+- Endpoint:  search/area
+- Url: https://carburanti.mise.gov.it/ospzApi/search/area
+- Header: 
+```
+{
+      region: criteria.region,
+      province: criteria.province ?? null,
+      town: criteria.town ?? null,
+      priceOrder: criteria.priceOrder ?? 'desc',
+      fuelType: `${criteria.fuelType ?? FuelType.ALL}-${
+        criteria.refuelingMode ?? RefuelingMode.ALL
+      }
+```
+
+
+
+search/area
 ###
 
 - Endpoint: 
