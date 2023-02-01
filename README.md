@@ -108,7 +108,7 @@ Criteri di base per tutter le query da mettere nell'header del POST:
 ### Ricerca per area
 
 - Base url:  https://carburanti.mise.gov.it/ospzApi/
-- Endpoint:  search/zone
+- Endpoint:  search/area
 - Url: https://carburanti.mise.gov.it/ospzApi/search/area
 - Criteri aggiuntivi in header: 
 
@@ -189,9 +189,10 @@ Formato delle singole stazioni di servizio nell'array "results":
 ### Ricerca per zona  (poligono)
 
 - Base url:  https://carburanti.mise.gov.it/ospzApi/
-- Endpoint:  search/area
-- Url: https://carburanti.mise.gov.it/ospzApi/search/zona
-- Header: 
+- Endpoint:  search/zone
+- Url: https://carburanti.mise.gov.it/ospzApi/search/zone
+- Header: vuoto
+- Payload:
 ```
 {
       points: v.sotto,
@@ -211,7 +212,7 @@ points: [
 ```
 
 
-Esempio di body:
+Esempio di payload:
 
 ```
 {
