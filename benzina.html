@@ -1,0 +1,152 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="generator" content="PSPad editor, www.pspad.com">
+  <title></title>
+  	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+  <form name="inputform" action="somewhere" method="post">
+  <input type="hidden" value="person" name="user">
+  <input type="hidden" value="password" name="pwd">
+  <input type="hidden" value="place" name="organization">
+  <input type="hidden" value="key" name="requiredkey">
+</form>
+<script>
+const PROXY_STRING = "https://win98.altervista.org/space/exploration/myp.php?pass=miapass&mode=native&url=";
+url = "https://carburanti.mise.gov.it/ospzApi/search/area";
+
+
+
+RefuelingMode =  {
+  SELF : '1',
+  SERVED : '0',
+  ALL : 'x',
+};
+
+FuelType = {
+  ALL : '0',
+  PETROL : '1', // Benzina
+  DIESEL : '2', // Gasolio
+  METHANE : '3', // Metano
+  GPL : '4',
+  GCN : '323',
+  GNL : '324',
+};
+
+SearchBaseCriteria = {
+  fuelType: 1, // FuelType
+  refuelingMode: 1, // RefuelingMode
+  priceOrder: 'asc' //'asc' | 'desc'
+};
+
+SearchByZoneCriteria=  { // extends SearchBaseCriteria
+  points: [] // MapPoint[]
+};
+
+
+SearchByGeographicAreaCriteria = { // extends SearchBaseCriteria
+  province: null, //string
+  region: null, // number
+  town: null // string
+};
+
+ SearchByBrandCriteria = { // extends SearchBaseCriteria
+  province:  null, //string
+  region:  null, //number
+  brand:  null, //string
+  queryText:  null, //string
+};
+
+
+axiosUrl = PROXY_STRING + encodeURIComponent(url);
+
+myRegion = 9;
+myProvince = "";
+myTown = "";//Fonte Nuova";
+myLat = 41.9758257;
+myLng = 12.6344734;
+myRadius = 5;
+
+axiosHeaders = null;
+
+function scarica() {
+
+	if (PROXY_STRING !== "") {
+		axiosUrl =  PROXY_STRING + encodeURIComponent(url);
+	} else {
+		axiosUrl = url;
+	};
+
+axiosUrl = "https://win98.altervista.org/proxy-benzina.php?region=" + myRegion + "&province=" + myProvince + "&town=" + myTown + "&lat=" + myLat + "&lng=" + myLng + "&radius=" + myRadius;
+
+/*console.log(axiosUrl);
+console.log(payload);
+console.log(axiosHeaders);
+*/
+ let byZone = axios.post(
+    			axiosUrl,
+    			null, //axiosPayload,
+    			{
+    				headers: null, //axiosHeaders
+    	   		}
+            )
+			.then(response => {
+                rawResponse = response.data;
+//console.log("Risultato grezzo: ", rawResponse);
+                fixedResponse = rawResponse.split("<br>").join("");
+//console.log(">>>>>>>>>>>>>>fixedResponse: ", fixedResponse);
+               fixedResponse2 = fixedResponse.split("\n").join("");
+//console.log("############fixedResponse2: ", fixedResponse2);
+                JSONresponse = JSON.parse(fixedResponse2);
+//console.log("Risultato JSON: ", JSONresponse);
+//console.log("Parametri: ", JSONresponse.sent);
+//console.log("Risultato vero: ", JSONresponse.response);
+    lista = JSONresponse.response.results;
+console.log("Elenco: ", lista);
+    myTable = document.createElement("table");
+    myTable.setAttribute("border",1);
+
+    lista.forEach((benzinaio) => {
+        benzinaio.fuels.forEach((pompa) => {
+          var riga = document.createElement("TR");
+          var cella = document.createElement("TD");
+          cella.innerHTML = benzinaio.brand;
+          riga.appendChild(cella);
+
+          cella = document.createElement("TD");
+          cella.innerHTML = benzinaio.address;
+          riga.appendChild(cella);
+
+          cella = document.createElement("TD");
+          cella.innerHTML = benzinaio.insertDate.replace("T"," ");
+          riga.appendChild(cella);
+
+          cella = document.createElement("TD");
+          cella.innerHTML = pompa.name;
+          riga.appendChild(cella);
+
+          cella = document.createElement("TD");
+          cella.innerHTML = pompa.price;
+          riga.appendChild(cella);
+          if ((pompa.name.toUpperCase() == "BENZINA") && (pompa.isSelf == true)) {
+            myTable.appendChild(riga);
+        }
+        });
+    });
+    document.body.appendChild(myTable);
+			})
+			.catch(
+			  function (error) {
+				console.log("ERROR 001 for POST :\n",  error);
+			  }
+			);
+}
+
+</script>
+
+<button onclick="scarica()">Scarica</button><br>
+  </body>
+</html>
+
