@@ -1,24 +1,21 @@
-# distributori-benzina
+**Distributori benzina**
 
-Test per ricerca distributore più economico usando cronjob tramite actions di github come spiegato qui:  https://theanshuman.dev/articles/free-cron-jobs-with-github-actions-31d6
+Pagina di interrogazione per il [Portale carburanti MISE]( https://carburanti.mise.gov.it/ospzSearch/home).
 
-Portale carburanti MISE: https://carburanti.mise.gov.it/ospzSearch/home
+# API queries
 
-Libreria usata per chiamate al server nelle actions: https://github.com/Satak/webrequest-action
-
-## API queries
+## Interrogazione dati statici ([fonte](https://github.com/Pater999/osservaprezzi-carburanti-node/blob/master/src/methods/registry.ts))
 
 Base url: https://carburanti.mise.gov.it/ospzApi/registry/
 
-
 ### Elenco regioni:
 
-- Endpoint: 
+- Endpoint: /region
 - Test link: https://carburanti.mise.gov.it/ospzApi/registry/region
 
 ### Elenco province
 
-- Endpoint: registry/province
+- Endpoint: /province
 - https://carburanti.mise.gov.it/ospzApi/registry/province?regionId=9
 
 Risultato:
@@ -52,7 +49,7 @@ Risultato:
 
 ### Elenco comuni di data provincia
 
- - Endpoint: registry/town
+ - Endpoint: /town
  - Test link:  https://carburanti.mise.gov.it/ospzApi/registry/town?province=RM
 
 Risultato:
@@ -73,44 +70,46 @@ Risultato:
 }
 ```
 
-### Elenco autostrade d'italia ([fonte](https://github.com/Pater999/osservaprezzi-carburanti-node/blob/master/src/methods/registry.ts))
+### Elenco autostrade d'italia 
 
-- Endpoint: registry/highway
+- Endpoint: /highway
 - Test link:  https://carburanti.mise.gov.it/ospzApi/registry/highway
 
 ### Elenco marchi:
 
-- Endpoint: registry/brands
+- Endpoint: /brands
 - Test link:  https://carburanti.mise.gov.it/ospzApi/registry/brands
 
 ### Elenco loghi
 
-- Endpoint: registry/alllogos
+- Endpoint: /alllogos
 - Test link:  https://carburanti.mise.gov.it/ospzApi/registry/alllogos
 
 ### Dettagli area di servizio
 
 Una volta ottenuto tramite ricerca l'id di una stazione di servizio, con questa query se ne possono ottenere i dettagli:
 
-- Endpoint: registry/servicearea/
+- Endpoint: /servicearea
 - Test link: https://carburanti.mise.gov.it/ospzApi/registry/servicearea/52621
 
-## Ricerche ## 
+
+## Interrogazioni per dati dinamici (prezzi) ## 
 
 Criteri di base per tutter le query da mettere nell'header del POST:
 
+- Base url:  https://carburanti.mise.gov.it/ospzApi
 
 - fuelType: v. sotto
 - refuelingMode: v. sotto
 - priceOrder: "asc" oppure "desc"
 
   
-### Ricerca per area
+### Ricerca per nome
 
-- Base url:  https://carburanti.mise.gov.it/ospzApi/
-- Endpoint:  search/area
+- Endpoint:  /search/area
 - Url: https://carburanti.mise.gov.it/ospzApi/search/area
-- Criteri aggiuntivi in header: 
+- Header: vuoto
+- Payload: 
 
     - region: ([numero](https://carburanti.mise.gov.it/ospzApi/registry/region)),     
     - province: ([sigla della provincia](https://carburanti.mise.gov.it/ospzApi/registry/province?regionId=9) oppure null; il link di esempio fornisce l'elenco delle province della regione 9  (Lazio)),     
@@ -118,7 +117,6 @@ Criteri di base per tutter le query da mettere nell'header del POST:
     - priceOrder: "asc" o "desc",      
     - fuelType: "FuelType-RefuelingMode"  (FuelType e RefuelingMode sono numeri (v. sotto))
       
-
 
 
 *refuelingMode* e *fuelTpye* sono definiti in https://github.com/Pater999/osservaprezzi-carburanti-node/blob/master/src/types/enums.ts:
@@ -186,9 +184,8 @@ Formato delle singole stazioni di servizio nell'array "results":
  
 
 
-### Ricerca per zona  (poligono)
+### Ricerca per zona  (poligono o cerchio+distanza)
 
-- Base url:  https://carburanti.mise.gov.it/ospzApi/
 - Endpoint:  search/zone
 - Url: https://carburanti.mise.gov.it/ospzApi/search/zone
 - Header: vuoto
@@ -196,6 +193,7 @@ Formato delle singole stazioni di servizio nell'array "results":
 ```
 {
       points: v.sotto,
+      radius: se il punto è uno solo, "radius" indica il raggio del cerchio centrato su quel punto
       priceOrder:"asc" oppure "desc",
       fuelType: FuelType-refuelingMode
       }
@@ -233,7 +231,7 @@ Risultato:
     "success": true,
     "center": {
         "lat": xxxxxxxxxx,
-        "lng": yyyyyyyyyyyyyyy
+        "lng": yyyyyyyyyy
     },
     "results": []
 }  
@@ -325,12 +323,9 @@ Formato delle singole stazioni di servizio nell'array "results":
     ]
 }
 ```
-###
 
-Spare:
+### Link google centrato su coordinate LAT, LON: https://www.google.it/maps/@LAT,LON,17z
 
-- Endpoint: 
-- Test link: https://carburanti.mise.gov.it/ospzApi/
 
 ------------------
 
@@ -338,7 +333,4 @@ Dati odierni (tutta italia in singolo file):
 
 - Prezzo alle 08:00: https://www.mise.gov.it/images/exportCSV/prezzo_alle_8.csv
 - Anagrafica impianti attivi: https://www.mise.gov.it/images/exportCSV/anagrafica_impianti_attivi.csv
-
-------------------
-
-Archivio anni precedenti: https://www.mise.gov.it/it/open-data/elenco-dataset/carburanti-archivio-prezzi
+- Archivio anni precedenti: https://www.mise.gov.it/it/open-data/elenco-dataset/carburanti-archivio-prezzi
