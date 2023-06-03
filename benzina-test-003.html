@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map {
+      height: 400px;
+    }
+
+    .custom-marker {
+      background-color: white;
+      border: 2px solid black;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <table id="resultsTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Self</th>
+        <th>Servito</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Table rows will be dynamically generated here -->
+    </tbody>
+  </table>
+
+  <div id="map"></div>
+ <p>Latitudine: <input type="text" id="latInput" readonly></p>
+  <p>Longitudine: <input type="text" id="lngInput" readonly></p>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+const  results =  [{
+        "id": 6657,
+        "name": "MONTEROTONDO VIA FILIPPO TURATI 101",
+        "fuels": [{
+            "id": 53690813,
+            "price": 1.789,
+            "name": "Benzina",
+            "fuelId": 1,
+            "isSelf": true
+        }, {
+            "id": 53690814,
+            "price": 1.639,
+            "name": "Gasolio",
+            "fuelId": 2,
+            "isSelf": true
+        }],
+        "location": {
+            "lat": 42.06103257306434,
+            "lng": 12.599813640117645
+        },
+        "insertDate": "2023-06-02T01:04:15+02:00",
+        "address": "VIA FILIPPO TURATI 101 00016 - MONTEROTONDO RM",
+        "brand": "Q8"
+    }, {
+        "id": 35156,
+        "name": "AREA COFFEE",
+        "fuels": [{
+            "id": 52990297,
+            "price": 1.999,
+            "name": "Benzina",
+            "fuelId": 1,
+            "isSelf": false
+        }, {
+            "id": 52990296,
+            "price": 1.799,
+            "name": "Benzina",
+            "fuelId": 1,
+            "isSelf": true
+        }, {
+            "id": 52990299,
+            "price": 1.859,
+            "name": "Gasolio",
+            "fuelId": 2,
+            "isSelf": false
+        }, {
+            "id": 52990298,
+            "price": 1.659,
+            "name": "Gasolio",
+            "fuelId": 2,
+            "isSelf": true
+        }, {
+            "id": 52990300,
+            "price": 0.769,
+            "name": "GPL",
+            "fuelId": 4,
+            "isSelf": false
+        }, {
+            "id": 52990301,
+            "price": 2.289,
+            "name": "Hi-Q Diesel",
+            "fuelId": 6,
+            "isSelf": false
+        }],
+        "location": {
+            "lat": 42.06386561323193,
+            "lng": 12.629591524600983
+        },
+        "insertDate": "2023-05-16T07:01:35+02:00",
+        "address": "VIA EINAUDI KM 2,400 00015 - MONTEROTONDO RM",
+        "brand": "Q8"
+    }, {
+        "id": 22874,
+        "name": "eni monterotondo",
+        "fuels": [{
+            "id": 53489688,
+            "price": 2.034,
+            "name": "Benzina",
+            "fuelId": 1,
+            "isSelf": false
+        }, {
+            "id": 53489687,
+            "price": 1.814,
+            "name": "Benzina",
+            "fuelId": 1,
+            "isSelf": true
+        }, {
+            "id": 53489690,
+            "price": 1.884,
+            "name": "Gasolio",
+            "fuelId": 2,
+            "isSelf": false
+        }, {
+            "id": 53489689,
+            "price": 1.664,
+            "name": "Gasolio",
+            "fuelId": 2,
+            "isSelf": true
+        }, {
+            "id": 53489692,
+            "price": 1.984,
+            "name": "Blue Diesel",
+            "fuelId": 20,
+            "isSelf": false
+        }, {
+            "id": 53489691,
+            "price": 1.764,
+            "name": "Blue Diesel",
+            "fuelId": 20,
+            "isSelf": true
+        }],
+        "location": {
+            "lat": 42.06099852084146,
+            "lng": 12.586717754602432
+        },
+        "insertDate": "2023-05-27T14:15:47+02:00",
+        "address": "VIA SALARIA KM. 22,950 SNC 00015 - MONTEROTONDO RM",
+        "brand": "AgipEni"
+    }, {
+        "id": 12917,
+        "name": "TREVISAN ROBERTO",
+        "fuels": [{
+            "id": 53677421,
+            "price": 2.119,
+            "name": "Benzina",
+            "fuelId": 1,
+            "isSelf": false
+        }, {
+            "id": 53677420,
+            "price": 1.819,
+            "name": "Benzina",
+            "fuelId": 1,
+            "isSelf": true
+        }, {
+            "id": 53677419,
+            "price": 1.969,
+            "name": "Gasolio",
+            "fuelId": 2,
+            "isSelf": false
+        }, {
+            "id": 53677418,
+            "price": 1.669,
+            "name": "Gasolio",
+            "fuelId": 2,
+            "isSelf": true
+        }],
+        "location": {
+            "lat": 42.06312744588049,
+            "lng": 12.590307891368866
+        },
+        "insertDate": "2023-06-01T15:42:18+02:00",
+        "address": "VIA SALARIA KM. 23+330  00015 - MONTEROTONDO RM",
+        "brand": "Api-Ip"
+    }, {
+        "id": 52326,
+        "name": "A.P. FUEL MONTEROTONDO",
+        "fuels": [{
+            "id": 53632650,
+            "price": 1.945,
+            "name": "Benzina",
+            "fuelId": 1,
+            "isSelf": false
+        }, {
+            "id": 53632649,
+            "price": 1.825,
+            "name": "Benzina",
+            "fuelId": 1,
+            "isSelf": true
+        }, {
+            "id": 53632648,
+            "price": 1.785,
+            "name": "Gasolio",
+            "fuelId": 2,
+            "isSelf": false
+        }, {
+            "id": 53632647,
+            "price": 1.665,
+            "name": "Gasolio",
+            "fuelId": 2,
+            "isSelf": true
+        }],
+        "location": {
+            "lat": 42.04967116667672,
+            "lng": 12.612383841139243
+        },
+        "insertDate": "2023-05-31T16:38:18+02:00",
+        "address": "VIA DELLE FORNACI KM. 4+150 SNC 00015 - MONTEROTONDO RM",
+        "brand": "PompeBianche"
+    }, {
+        "id": 11823,
+        "name": "MONTEROTONDO-VIA LEONARDO DA VINCI 25",
+        "fuels": [{
+            "id": 53694570,
+            "price": 1.829,
+            "name": "Benzina",
+            "fuelId": 1,
+            "isSelf": true
+        }, {
+            "id": 53694571,
+            "price": 1.679,
+            "name": "Gasolio",
+            "fuelId": 2,
+            "isSelf": true
+        }, {
+            "id": 53694572,
+            "price": 1.979,
+            "name": "Hi-Q Diesel",
+            "fuelId": 6,
+            "isSelf": true
+        }, {
+            "id": 53694573,
+            "price": 2.129,
+            "name": "HiQ Perform+",
+            "fuelId": 28,
+            "isSelf": true
+        }],
+        "location": {
+            "lat": 42.07473447662624,
+            "lng": 12.596212245368974
+        },
+        "insertDate": "2023-06-02T07:04:12+02:00",
+        "address": "VIA LEONARDO DA VINCI 25 00015 - MONTEROTONDO RM",
+        "brand": "Q8"
+    }, {
+        "id": 51457,
+        "name": "IP",
+        "fuels": [{
+            "id": 53529176,
+            "price": 1.829,
+            "name": "Benzina",
+            "fuelId": 1,
+            "isSelf": false
+        }, {
+            "id": 53529175,
+            "price": 1.829,
+            "name": "Benzina",
+            "fuelId": 1,
+            "isSelf": true
+        }, {
+            "id": 53529181,
+            "price": 1.679,
+            "name": "Gasolio",
+            "fuelId": 2,
+            "isSelf": false
+        }, {
+            "id": 53529178,
+            "price": 1.679,
+            "name": "Gasolio",
+            "fuelId": 2,
+            "isSelf": true
+        }, {
+            "id": 53529173,
+            "price": 0.769,
+            "name": "GPL",
+            "fuelId": 4,
+            "isSelf": false
+        }],
+        "location": {
+            "lat": 42.054144386972524,
+            "lng": 12.634397429824284
+        },
+        "insertDate": "2023-05-29T08:26:20+02:00",
+        "address": "VIA SANDRO PERTINI  20 00015 - MONTEROTONDO RM",
+        "brand": "Api-Ip"
+    }]
+
+
+   // Creazione della tabella HTML
+const table = document.getElementById('resultsTable');
+
+results.forEach((result, index) => {
+  const row = document.createElement('tr');
+  const numberCell = document.createElement('td');
+  const nameCell = document.createElement('td');
+  const priceSelfCell = document.createElement('td');
+  const priceServitoCell = document.createElement('td');
+
+  numberCell.textContent = index + 1;
+  nameCell.textContent = result.name;
+
+  const fuels = result.fuels.filter(fuel => fuel.fuelId === 1);
+  const selfFuel = fuels.find(fuel => fuel.isSelf === true);
+  const servitoFuel = fuels.find(fuel => fuel.isSelf === false);
+
+  if (selfFuel) {
+    priceSelfCell.textContent = selfFuel.price.toFixed(3);
+  } else {
+    priceSelfCell.textContent = 'N/A';
+  }
+
+  if (servitoFuel) {
+    priceServitoCell.textContent = servitoFuel.price.toFixed(3);
+  } else {
+    priceServitoCell.textContent = 'N/A';
+  }
+
+  row.appendChild(numberCell);
+  row.appendChild(nameCell);
+  row.appendChild(priceSelfCell);
+  row.appendChild(priceServitoCell);
+
+  table.appendChild(row);
+});
+
+
+table.setAttribute("border","1");
+    // Creazione della mappa Leaflet
+    const map = L.map('map').setView([42.061, 12.599], 13);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+      maxZoom: 18,
+    }).addTo(map);
+
+function onMapClick(e) {
+  document.getElementById('latInput').value = e.latlng.lat.toFixed(6);
+  document.getElementById('lngInput').value = e.latlng.lng.toFixed(6);
+
+  const payload = {
+    points: [{ lat: e.latlng.lat, lng: e.latlng.lng }],
+    fuelType: 1,
+    refuelingMode: 1,
+    priceOrder: 'asc',
+    radius: '10'
+  };
+
+  fetch("https://carburanti.mise.gov.it/ospzApi/search/zone", {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
+  })
+    .then(
+response => {
+      console.log(response);
+      return response.json();
+    }
+    )
+    .then(data => {
+      // Gestisci i dati della risposta qui
+      console.log(data);
+    })
+    .catch(error => {
+      console.error('Si è verificato un errore:', error);
+    });
+}
+
+    map.on('click', onMapClick);
+
+    results.forEach((result, index) => {
+      const marker = L.marker([result.location.lat, result.location.lng]).addTo(map);
+      popupText = "";
+      result.fuels.forEach((fuel) => {
+        popupText += fuel.price + " " + fuel.name + " " + (fuel.isSelf ? "Self" : "Servito") + "<br>";
+      });
+
+      marker.bindPopup(`Location ${index + 1}: ${result.name} <BR> ${popupText}`);
+      marker.setIcon(L.divIcon({
+        className: 'custom-marker',
+        html: `<div class="marker-number">${index + 1}</div>`,
+      }));
+    });
+  </script>
+</body>
+</html>
