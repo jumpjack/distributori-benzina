@@ -79,7 +79,7 @@ $headers = array(
    'Access-Control-Allow-Origin: *',
    'Access-Control-Allow-Credentials: true',
    'Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE',
-   'Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, X-Requested-With, X-GIGYA-ID_TOKEN,  X-GIGYA-ID-TOKEN, apikey, *, expiration, json, fields, login_token, authorization, access_token, X-RESUME-TOKEN'
+   'Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, X-Requested-With, X-GIGYA-ID_TOKEN,  X-GIGYA-ID-TOKEN, apikey, *, expiration, json, fields, login_token, authorization, access_token, X-RESUME-TOKEN, Content-Type'
 );
 
 		header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
