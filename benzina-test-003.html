@@ -4,10 +4,11 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <style>
     #map {
-      height: 400px;
+      height: 600px;
+      width: 600px;
     }
 
-    .custom-marker {
+    /*.custom-marker {
       background-color: white;
       border: 2px solid black;
       border-radius: 50%;
@@ -17,10 +18,47 @@
       justify-content: center;
       align-items: center;
       font-weight: bold;
-    }
+    }*/
+
+.custom-marker {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background-color: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 50%;
+  color: #000000;
+  font-size: 14px;
+  text-align: center;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.custom-marker::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 50%;
+  left: 100%; /* Sposta il testo a destra */
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  margin-left: 5px; /* Aggiungi margine a sinistra per separare il testo dal cerchio */
+}
+
+
+
   </style>
 </head>
 <body>
+Lat:<input type=text id="START_LAT" value="42.000"><br>
+Lon:<input type=text id="START_LNG" value="12.646"><br>
+<button onclick="map.panTo([START_LAT.value, START_LNG.value]);">Center map</button><br>
+<table>
+<tr>
+<td>
+  <div id="map"></div>
+</td>
+<td>
   <table id="resultsTable">
     <thead>
       <tr>
@@ -28,408 +66,169 @@
         <th>Name</th>
         <th>Self</th>
         <th>Servito</th>
+        <th>Centra mappa</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody id = "tbody">
       <!-- Table rows will be dynamically generated here -->
     </tbody>
   </table>
+</td>
+</tr>
+</table>
 
-  <div id="map"></div>
- <p>Latitudine: <input type="text" id="latInput" readonly></p>
-  <p>Longitudine: <input type="text" id="lngInput" readonly> <a href="https://carburanti.mise.gov.it/ospzApi/search/zone" id="il_tuo_link_id">Link di esempio</a></p>
-
-<button id="downloadButton">Download</button><br>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
-const  results =  [{
-        "id": 6657,
-        "name": "MONTEROTONDO VIA FILIPPO TURATI 101",
-        "fuels": [{
-            "id": 53690813,
-            "price": 1.789,
-            "name": "Benzina",
-            "fuelId": 1,
-            "isSelf": true
-        }, {
-            "id": 53690814,
-            "price": 1.639,
-            "name": "Gasolio",
-            "fuelId": 2,
-            "isSelf": true
-        }],
-        "location": {
-            "lat": 42.06103257306434,
-            "lng": 12.599813640117645
-        },
-        "insertDate": "2023-06-02T01:04:15+02:00",
-        "address": "VIA FILIPPO TURATI 101 00016 - MONTEROTONDO RM",
-        "brand": "Q8"
-    }, {
-        "id": 35156,
-        "name": "AREA COFFEE",
-        "fuels": [{
-            "id": 52990297,
-            "price": 1.999,
-            "name": "Benzina",
-            "fuelId": 1,
-            "isSelf": false
-        }, {
-            "id": 52990296,
-            "price": 1.799,
-            "name": "Benzina",
-            "fuelId": 1,
-            "isSelf": true
-        }, {
-            "id": 52990299,
-            "price": 1.859,
-            "name": "Gasolio",
-            "fuelId": 2,
-            "isSelf": false
-        }, {
-            "id": 52990298,
-            "price": 1.659,
-            "name": "Gasolio",
-            "fuelId": 2,
-            "isSelf": true
-        }, {
-            "id": 52990300,
-            "price": 0.769,
-            "name": "GPL",
-            "fuelId": 4,
-            "isSelf": false
-        }, {
-            "id": 52990301,
-            "price": 2.289,
-            "name": "Hi-Q Diesel",
-            "fuelId": 6,
-            "isSelf": false
-        }],
-        "location": {
-            "lat": 42.06386561323193,
-            "lng": 12.629591524600983
-        },
-        "insertDate": "2023-05-16T07:01:35+02:00",
-        "address": "VIA EINAUDI KM 2,400 00015 - MONTEROTONDO RM",
-        "brand": "Q8"
-    }, {
-        "id": 22874,
-        "name": "eni monterotondo",
-        "fuels": [{
-            "id": 53489688,
-            "price": 2.034,
-            "name": "Benzina",
-            "fuelId": 1,
-            "isSelf": false
-        }, {
-            "id": 53489687,
-            "price": 1.814,
-            "name": "Benzina",
-            "fuelId": 1,
-            "isSelf": true
-        }, {
-            "id": 53489690,
-            "price": 1.884,
-            "name": "Gasolio",
-            "fuelId": 2,
-            "isSelf": false
-        }, {
-            "id": 53489689,
-            "price": 1.664,
-            "name": "Gasolio",
-            "fuelId": 2,
-            "isSelf": true
-        }, {
-            "id": 53489692,
-            "price": 1.984,
-            "name": "Blue Diesel",
-            "fuelId": 20,
-            "isSelf": false
-        }, {
-            "id": 53489691,
-            "price": 1.764,
-            "name": "Blue Diesel",
-            "fuelId": 20,
-            "isSelf": true
-        }],
-        "location": {
-            "lat": 42.06099852084146,
-            "lng": 12.586717754602432
-        },
-        "insertDate": "2023-05-27T14:15:47+02:00",
-        "address": "VIA SALARIA KM. 22,950 SNC 00015 - MONTEROTONDO RM",
-        "brand": "AgipEni"
-    }, {
-        "id": 12917,
-        "name": "TREVISAN ROBERTO",
-        "fuels": [{
-            "id": 53677421,
-            "price": 2.119,
-            "name": "Benzina",
-            "fuelId": 1,
-            "isSelf": false
-        }, {
-            "id": 53677420,
-            "price": 1.819,
-            "name": "Benzina",
-            "fuelId": 1,
-            "isSelf": true
-        }, {
-            "id": 53677419,
-            "price": 1.969,
-            "name": "Gasolio",
-            "fuelId": 2,
-            "isSelf": false
-        }, {
-            "id": 53677418,
-            "price": 1.669,
-            "name": "Gasolio",
-            "fuelId": 2,
-            "isSelf": true
-        }],
-        "location": {
-            "lat": 42.06312744588049,
-            "lng": 12.590307891368866
-        },
-        "insertDate": "2023-06-01T15:42:18+02:00",
-        "address": "VIA SALARIA KM. 23+330  00015 - MONTEROTONDO RM",
-        "brand": "Api-Ip"
-    }, {
-        "id": 52326,
-        "name": "A.P. FUEL MONTEROTONDO",
-        "fuels": [{
-            "id": 53632650,
-            "price": 1.945,
-            "name": "Benzina",
-            "fuelId": 1,
-            "isSelf": false
-        }, {
-            "id": 53632649,
-            "price": 1.825,
-            "name": "Benzina",
-            "fuelId": 1,
-            "isSelf": true
-        }, {
-            "id": 53632648,
-            "price": 1.785,
-            "name": "Gasolio",
-            "fuelId": 2,
-            "isSelf": false
-        }, {
-            "id": 53632647,
-            "price": 1.665,
-            "name": "Gasolio",
-            "fuelId": 2,
-            "isSelf": true
-        }],
-        "location": {
-            "lat": 42.04967116667672,
-            "lng": 12.612383841139243
-        },
-        "insertDate": "2023-05-31T16:38:18+02:00",
-        "address": "VIA DELLE FORNACI KM. 4+150 SNC 00015 - MONTEROTONDO RM",
-        "brand": "PompeBianche"
-    }, {
-        "id": 11823,
-        "name": "MONTEROTONDO-VIA LEONARDO DA VINCI 25",
-        "fuels": [{
-            "id": 53694570,
-            "price": 1.829,
-            "name": "Benzina",
-            "fuelId": 1,
-            "isSelf": true
-        }, {
-            "id": 53694571,
-            "price": 1.679,
-            "name": "Gasolio",
-            "fuelId": 2,
-            "isSelf": true
-        }, {
-            "id": 53694572,
-            "price": 1.979,
-            "name": "Hi-Q Diesel",
-            "fuelId": 6,
-            "isSelf": true
-        }, {
-            "id": 53694573,
-            "price": 2.129,
-            "name": "HiQ Perform+",
-            "fuelId": 28,
-            "isSelf": true
-        }],
-        "location": {
-            "lat": 42.07473447662624,
-            "lng": 12.596212245368974
-        },
-        "insertDate": "2023-06-02T07:04:12+02:00",
-        "address": "VIA LEONARDO DA VINCI 25 00015 - MONTEROTONDO RM",
-        "brand": "Q8"
-    }, {
-        "id": 51457,
-        "name": "IP",
-        "fuels": [{
-            "id": 53529176,
-            "price": 1.829,
-            "name": "Benzina",
-            "fuelId": 1,
-            "isSelf": false
-        }, {
-            "id": 53529175,
-            "price": 1.829,
-            "name": "Benzina",
-            "fuelId": 1,
-            "isSelf": true
-        }, {
-            "id": 53529181,
-            "price": 1.679,
-            "name": "Gasolio",
-            "fuelId": 2,
-            "isSelf": false
-        }, {
-            "id": 53529178,
-            "price": 1.679,
-            "name": "Gasolio",
-            "fuelId": 2,
-            "isSelf": true
-        }, {
-            "id": 53529173,
-            "price": 0.769,
-            "name": "GPL",
-            "fuelId": 4,
-            "isSelf": false
-        }],
-        "location": {
-            "lat": 42.054144386972524,
-            "lng": 12.634397429824284
-        },
-        "insertDate": "2023-05-29T08:26:20+02:00",
-        "address": "VIA SANDRO PERTINI  20 00015 - MONTEROTONDO RM",
-        "brand": "Api-Ip"
-    }]
+  results =  [];
 
+startLat = document.getElementById("START_LAT").value;
+startLng = document.getElementById("START_LNG").value;
 
    // Creazione della tabella HTML
 const table = document.getElementById('resultsTable');
 
-results.forEach((result, index) => {
-  const row = document.createElement('tr');
-  const numberCell = document.createElement('td');
-  const nameCell = document.createElement('td');
-  const priceSelfCell = document.createElement('td');
-  const priceServitoCell = document.createElement('td');
 
-  numberCell.textContent = index + 1;
-  nameCell.textContent = result.name;
+    // Creazione della mappa Leaflet
+    const map = L.map('map').setView([startLat, startLng], 13);
 
-  const fuels = result.fuels.filter(fuel => fuel.fuelId === 1);
-  const selfFuel = fuels.find(fuel => fuel.isSelf === true);
-  const servitoFuel = fuels.find(fuel => fuel.isSelf === false);
-
-  if (selfFuel) {
-    priceSelfCell.textContent = selfFuel.price.toFixed(3);
-  } else {
-    priceSelfCell.textContent = 'N/A';
-  }
-
-  if (servitoFuel) {
-    priceServitoCell.textContent = servitoFuel.price.toFixed(3);
-  } else {
-    priceServitoCell.textContent = 'N/A';
-  }
-
-  row.appendChild(numberCell);
-  row.appendChild(nameCell);
-  row.appendChild(priceSelfCell);
-  row.appendChild(priceServitoCell);
-
-  table.appendChild(row);
+// Creazione di un'icona personalizzata per il marker
+var customIcon = L.divIcon({
+  className: 'custom-marker',
+  html: '<div class="marker-wrapper"><div id="marker-text" class="marker-text">Testo</div></div>',
 });
 
 
-table.setAttribute("border","1");
-    // Creazione della mappa Leaflet
-    const map = L.map('map').setView([42.061, 12.599], 13);
+// Creazione di un'icona personalizzata per il marker
+function createCustomIcon(text) {
+  return L.divIcon({
+    className: 'custom-marker',
+    html: `<div class="marker-wrapper"><div class="marker-text">${text}</div></div>`,
+  });
+}
+
+    // Crea una variabile per i marker layer
+    markerLayer = L.layerGroup().addTo(map);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
       maxZoom: 18,
     }).addTo(map);
 
-function onMapClick(e) {
-  document.getElementById('latInput').value = e.latlng.lat.toFixed(6);
-  document.getElementById('lngInput').value = e.latlng.lng.toFixed(6);
 
-  const payload = {
-    points: [{ lat: e.latlng.lat, lng: e.latlng.lng }],
-    fuelType: 1,
-    refuelingMode: 1,
-    priceOrder: 'asc',
-    radius: '10'
-  };
-const url = 'https://carburanti.mise.gov.it/ospzApi/search/zone';
-axios.post(url, payload, { headers: { 'Content-Type': 'application/json' } })
-  .then(response => {
-    console.log(response);
-    return response.data;
-  })
-  .then(data => {
-    // Gestisci i dati della risposta qui
-    console.log(data);
-  })
-  .catch(error => {
-    console.error('Si è verificato un errore:', error);
-  });
+    function onMapClick(e) {
+      const url = 'https://jumpjack.altervista.org/benzina/proxy-benzina.php?lat=' + e.latlng.lat + '&lng=' + e.latlng.lng + '&radius=3';
+
+      axios.get(url)
+        .then(response => {
+          console.log(response);
+          return response.data;
+        })
+        .then(data => {
+          console.log("DATA:",data);
+          results = data.response.results;
+
+          // Filtra per carburante desiderato:
+          results.forEach(result => {
+            result.fuels = result.fuels.filter(fuel => fuel.fuelId === 1); // 1 = benzina
+          });
+
+          tbody = document.getElementById("tbody");
+          tbody.innerHTML = "";
+
+          // Prima di aggiungere i nuovi marker, cancella quelli precedenti
+          markerLayer.clearLayers();
+          results.forEach((result, index) => {
+            popupText = "";
+            markerText = "";
+
+            result.fuels.forEach((fuel) => {
+              popupText += fuel.price + " " + fuel.name + " " + (fuel.isSelf ? "Self" : "Servito") + "<br>";
+              markerText += fuel.price  + "/";
+            });
+            markerText =  markerText.substring(0, markerText.length-1); // remove final "/"
+            markerText = (index + 1) + ") " + markerText +" (" + result.brand + ")";
 
 
-}
+             const marker = L.circleMarker([result.location.lat, result.location.lng], {
+                  color: 'black',
+                  fillColor: 'white',
+                  fillOpacity: 1,
+                  radius: 6
+                }).addTo(markerLayer);
+
+            // Aggiungi l'etichetta di testo al marker
+            marker.bindTooltip(markerText, {
+              permanent: true,
+              direction: 'right',
+              offset: [6, 0]
+            }).openTooltip();
+
+            marker.bindPopup(`Location ${index + 1}: ${result.brand} <BR> ${popupText}`);
+
+          });
+
+         // table.innerHTML = "";
+
+
+          results.forEach((result, index) => {
+            const row = document.createElement('tr');
+            const numberCell = document.createElement('td');
+            const nameCell = document.createElement('td');
+            const priceSelfCell = document.createElement('td');
+            const priceServitoCell = document.createElement('td');
+            const locationCell = document.createElement('td');
+
+            numberCell.textContent = index + 1;
+            nameCell.textContent = result.brand;
+
+            const fuels = result.fuels.filter(fuel => fuel.fuelId === 1);
+            const selfFuel = fuels.find(fuel => fuel.isSelf === true);
+            const servitoFuel = fuels.find(fuel => fuel.isSelf === false);
+
+            if (selfFuel) {
+              priceSelfCell.textContent = selfFuel.price.toFixed(3);
+            } else {
+              priceSelfCell.textContent = 'N/A';
+            }
+
+            if (servitoFuel) {
+              priceServitoCell.textContent = servitoFuel.price.toFixed(3);
+            } else {
+              priceServitoCell.textContent = 'N/A';
+            }
+
+           // Colonna "Posizione"
+            locationCell.textContent = "lat,lon = " + result.location.lat.toFixed(3)+ "," + result.location.lng.toFixed(3);
+            locationCell.classList.add("location-cell");
+            locationCell.addEventListener("click", () => {
+              // Azione da eseguire al clic sulla posizione
+              map.panTo([result.location.lat, result.location.lng]);
+            });
+
+            row.appendChild(numberCell);
+            row.appendChild(nameCell);
+            row.appendChild(priceSelfCell);
+            row.appendChild(priceServitoCell);
+            row.appendChild(locationCell);
+
+            tbody.appendChild(row);
+          });
+
+
+          table.setAttribute("border","1");
+
+        })
+        .catch(error => {
+          console.error('Si è verificato un errore:', error);
+        });
+
+
+    }
 
     map.on('click', onMapClick);
-const downloadButton = document.getElementById('downloadButton');
-
-// Gestisci la pressione del tasto
-downloadButton.addEventListener('click', () => {
-  const linkUrl = 'https://carburanti.mise.gov.it/ospzApi/search/zone'; // Sostituisci con il link di destinazione
-
-  fetch(linkUrl)
-    .then(response => response.blob()) // Ottieni il contenuto come oggetto Blob
-    .then(blob => {
-      // Crea un URL oggetto per il blob
-      const url = URL.createObjectURL(blob);
-
-      // Crea un elemento link temporaneo
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'file.pdf'; // Specifica il nome del file da scaricare
-
-      // Simula il clic sul link per avviare il download
-      link.click();
-
-      // Rimuovi l'URL oggetto dopo il download
-      URL.revokeObjectURL(url);
-    })
-    .catch(error => {
-      console.error('Errore durante il download:', error);
-    });
-});
-
-    results.forEach((result, index) => {
-      const marker = L.marker([result.location.lat, result.location.lng]).addTo(map);
-      popupText = "";
 
 
-
-
-      result.fuels.forEach((fuel) => {
-        popupText += fuel.price + " " + fuel.name + " " + (fuel.isSelf ? "Self" : "Servito") + "<br>";
-      });
-
-      marker.bindPopup(`Location ${index + 1}: ${result.name} <BR> ${popupText}`);
-      marker.setIcon(L.divIcon({
-        className: 'custom-marker',
-        html: `<div class="marker-number">${index + 1}</div>`,
-      }));
-    });
   </script>
 </body>
 </html>
