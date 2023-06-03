@@ -37,8 +37,10 @@
 
   <div id="map"></div>
  <p>Latitudine: <input type="text" id="latInput" readonly></p>
-  <p>Longitudine: <input type="text" id="lngInput" readonly></p>
+  <p>Longitudine: <input type="text" id="lngInput" readonly> <a href="https://carburanti.mise.gov.it/ospzApi/search/zone" id="il_tuo_link_id">Link di esempio</a></p>
 
+<button id="downloadButton">Download</button><br>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script>
 const  results =  [{
@@ -365,34 +367,59 @@ function onMapClick(e) {
     priceOrder: 'asc',
     radius: '10'
   };
-
-  fetch("https://carburanti.mise.gov.it/ospzApi/search/zone", {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
+const url = 'https://carburanti.mise.gov.it/ospzApi/search/zone';
+axios.post(url, payload, { headers: { 'Content-Type': 'application/json' } })
+  .then(response => {
+    console.log(response);
+    return response.data;
   })
-    .then(
-response => {
-      console.log(response);
-      return response.json();
-    }
-    )
-    .then(data => {
-      // Gestisci i dati della risposta qui
-      console.log(data);
-    })
-    .catch(error => {
-      console.error('Si è verificato un errore:', error);
-    });
+  .then(data => {
+    // Gestisci i dati della risposta qui
+    console.log(data);
+  })
+  .catch(error => {
+    console.error('Si è verificato un errore:', error);
+  });
+
+
 }
 
     map.on('click', onMapClick);
+const downloadButton = document.getElementById('downloadButton');
+
+// Gestisci la pressione del tasto
+downloadButton.addEventListener('click', () => {
+  const linkUrl = 'https://carburanti.mise.gov.it/ospzApi/search/zone'; // Sostituisci con il link di destinazione
+
+  fetch(linkUrl)
+    .then(response => response.blob()) // Ottieni il contenuto come oggetto Blob
+    .then(blob => {
+      // Crea un URL oggetto per il blob
+      const url = URL.createObjectURL(blob);
+
+      // Crea un elemento link temporaneo
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'file.pdf'; // Specifica il nome del file da scaricare
+
+      // Simula il clic sul link per avviare il download
+      link.click();
+
+      // Rimuovi l'URL oggetto dopo il download
+      URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+      console.error('Errore durante il download:', error);
+    });
+});
 
     results.forEach((result, index) => {
       const marker = L.marker([result.location.lat, result.location.lng]).addTo(map);
       popupText = "";
+
+
+
+
       result.fuels.forEach((fuel) => {
         popupText += fuel.price + " " + fuel.name + " " + (fuel.isSelf ? "Self" : "Servito") + "<br>";
       });
